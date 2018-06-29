@@ -9,7 +9,7 @@ abstract class Calc{
 	}
 }
 
-class Plus extends Calc{
+class Plu2s extends Calc{
 	void answer() {
 		System.out.println(a+"+"+b+"="+(a+b));
 	}
@@ -17,7 +17,7 @@ class Plus extends Calc{
 public class Calculation {
 
 	public static void main(String[] args) {
-		Plus a = new Plus();
+		Plu2s a = new Plus2();
 		a.setData(27, 32);
 		a.answer();
 
