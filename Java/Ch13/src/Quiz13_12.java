@@ -3,17 +3,18 @@ import java.util.Scanner;
 public class Quiz13_12 {
 
 	public static void main(String[] args) {
-		int b, c, d, e, f, g, h;
 		Scanner s = new Scanner(System.in);
-		int c = a / 100;
-		int d = (a - (c * 100)) / 10;
-		int e = ((a - (c * 100)) - (d * 10));
-		while (true) {
-			if ((c != d) && (c != e) && (d != e)) {
-				break;
+		for(;;) {
+		int b, c, d, e, f, g, h;
+		int a = (int) (Math.random() * 897) + 102;	
+		c = a / 100;
+		d = (a - (c * 100)) / 10;
+		e = ((a - (c * 100)) - (d * 10)); 
+		if ((c == d) || (c == e) || (d == e)) {
+				return;
 			}
-			int a = (int) (Math.random() * 897) + 102;		
-		}
+	
+		
 
 		System.out.println("숫자야구 시작~");
 		while (true) {
@@ -44,6 +45,8 @@ public class Quiz13_12 {
 			System.out.println(f + ":" + g + ":" + h);
 			System.out.println(i + " Strike  " + j + " Ball");
 
+		}
+		break;
 		}
 
 	}
