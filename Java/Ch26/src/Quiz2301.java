@@ -22,10 +22,11 @@ public class Quiz2301 {
 		list2.add(6);
 		
 		kyo.addAll(list1);//다더함
-		kyo.retainAll(list2);//겹치는것만출력
+		kyo.retainAll(list2);//겹치는것만남김
 		
 		cha.addAll(list1);
-		cha.removeAll(list2);
+		cha.removeAll(list2);//겹친걸 지워줌
+		//cha.remove(list2);
 		
 		hap.addAll(list1);
 		hap.removeAll(list2);
