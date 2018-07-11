@@ -11,7 +11,10 @@ public class A4_Read7 {
 			int dat = in.read();
 			System.out.println(dat);
 		}
-		
+		finally {
+			if (in!=null) //입력스트림 생성 성공했다면
+				in.close();
+		}
 
 	}
 
