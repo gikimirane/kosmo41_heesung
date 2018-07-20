@@ -1,0 +1,165 @@
+select * from 찾는것 . 안에있는것 다나옴
+where 찾을거 >=< 쓰면  찾는값에 해당하는거 나옴.
+
+where 찾을거 like '%_' 쓰면 해당하는것 (와일드카드);
+
+or and 쓰기
+
+order by 찾을것 asc,desc 오름 내림 차순
+
+in (d,d,d) 해당값 다찾음 not 찾을거 in 이면 안에값 뺴고
+
+length('칠말') 문자으 ㅣ길이 반환 lengthb는 한글을 2바이트로 인식. 많이쓴대
+
+LOWER 소문자 UPPER 대문자 INITCAP 첫글자만 대문자.
+
+substr (글,찾을시작위치,몇개)
+months_between(1,2) 두 날짜의 개월차 비교 trunc랑 같이쓰면좋음 뒤에 짤라줌.
+
+last_day 그달에 마지막 날을 알려줌.
+next_day(date, '요일') 하면 오는 그 요일을 알려줌
+select ename, dno, decode(dno,10,'회계부서',20,'연구부서',30,'루팡부서','값없을떄 기본부서')as 부서명  from employee
+order by dno asc;                   조건 결과     조건 결과    조건 결과      기본결과
+
+alter table dept
+add(테이블 추가)
+
+alter table dept
+modify (칼럼의 데이터크기,기본값 변경 가능)
+
+having 그룹함수와 같이씀 값비교용, 서브쿼리문 유용
+alter table dept
+drop column 칼럼 삭제 = 한번에 하나만 가능
+
+
+rename dept to emp; 테이블 이름 바꾸기.
+
+truncate table 컬럽만 남기고 데이터들은 다삭제. 포멧느낌
+
+create view v_테이블명 
+as
+select ~~~ from ~~~; 원하는것만 볼수있게 데이터공간 안먹는 뷰 테이블을 하나생성함ㅂ 개꿀
+
+
+unique 중복값 없게 해줌
+
+select eno, ename, dno
+from emp_copy
+intersect //교집합 union  union all //합집합
+select eno,ename,dno
+from emp_copy2;
+
+
+set serveroutput on
+declare
+v_eno number(4);
+v_ename employee.ename%type;
+begin
+v_eno :=7788;
+v_ename := 'SCOTT';
+dbms_output.put_line('사원선보   사원이름');
+dbms_output.put_line('----------------');
+dbms_output.put_line(v_eno  || '      '||    v_ename);
+end;
+/
+
+set serveroutput on
+declare
+v_employee employee%rowtype;
+temp number(4) :=1;
+annsal number(7,2);
+begin
+select * into v_employee
+from employee
+where ename='SCOTT';
+
+if (v_employee.commission is null) then v_employee.commission :=0;
+end if;
+annsal :=v_employee.salary*12+v_employee.commission;
+dbms_output.put_line('사원번호   사원이름    연봉'  );
+dbms_output.put_line('-------------------------');
+dbms_output.put_line(v_employee.eno  || '      '||    v_employee.ename||'   '||
+annsal);
+end;
+/
+
+
+loop문의 세가지 방법-------------------------------
+
+if문
+set serveroutput on
+declare
+dan number :=2;
+i number:=1;
+begin
+loop
+dbms_output.put_line(dan ||'*'||i||'='||(dan*i));
+i:=i+1;
+if i>9 then
+exit;
+end if;
+end loop;
+end;
+/
+
+for문
+
+set serveroutput on
+declare
+dan number :=2;
+i number:=1;
+begin
+for i in 1..9 loop
+dbms_output.put_line(dan ||'*'||i||'='||(dan*i));
+end loop;
+end;
+
+while문
+
+set serveroutput on
+declare
+dan number :=2;
+i number:=1;
+begin
+while i <= 9 loop
+dbms_output.put_line(dan ||'*'||i||'='||(dan*i));
+i:=i+1;
+end loop;
+end;
+/
+
+
+커서 반복문.
+set serveroutput on
+declare
+v_dept department%rowtype;
+cursor c1
+is select*from department;
+begin
+dbms_output.put_line('사원번호    사원이름   지역명');
+dbms_output.put_line('_________________________');
+open c1;
+loop
+fetch c1 into v_dept.dno,v_dept.dname,v_dept.loc;
+exit when c1 %notfound;
+dbms_output.put_line(v_dept.dno||'  '||v_dept.dname||'  '|| v_dept.loc);
+end loop;
+close c1;
+end;
+/
+
+커서반복문  for문활용
+set serveroutput on
+declare
+v_dept department%rowtype;
+cursor c1
+is select*from department;
+begin
+dbms_output.put_line('사원번호    사원이름   지역명');
+dbms_output.put_line('_________________________');
+for v_dept in c1 loop
+exit when c1 %notfound;
+dbms_output.put_line(v_dept.dno||'  '||v_dept.dname||'  '|| v_dept.loc);
+end loop;
+end;
+/

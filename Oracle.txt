@@ -1,0 +1,121 @@
+select * from employee;
+
+desc department;
+desc employee;
+
+select * from employee;
+
+select ename from employee;
+
+select ename, job, hiredate from employee;
+
+select salary, salary+300 from employee;
+
+select salary, salary*12+200 from employee;
+
+
+select ename, salary, job, dno, nvl(commission,0),salary*12, salary*12+nvl(commission,0) from employee;
+
+
+select ename, salary*12+nvl(commission , 0) as 연봉테이블 from employee;
+
+select * from DEPARTMENT;
+
+select distinct dno from employee;
+
+select *from employee;
+
+select job from employee;
+
+select distinct job from employee;
+
+select*from dual;
+select sysdate from dual;
+
+select eno, ename, salary
+FROM employee
+where salary != 1500;
+
+select * from employee 
+where ename = 'SCOTT';
+
+select *from employee
+where hiredate <= '1981/01/01';
+
+select * from employee
+where dno = 10 and job = 'MANAGER';
+
+select * from employee
+where not dno = 10;
+
+desc employee;
+select * from employee;
+
+select *from employee
+where salary >= 1000
+and salary <= 1500;
+
+select * from employee
+where ename like '%E_';
+
+select * from employee
+where commission is not null;
+
+
+select * from employee
+order by SALARY desc;
+
+select ename,salary,salary+300+nvl(commission , 0) 인상급여 from employ;
+
+select ename,salary,salary*12+100 from employee order by salary desc;
+
+select * from employee
+where salary >= 2000
+order by salary desc;
+
+select ename, manager from employee
+where manager  = 7788;
+
+select ename, salary from employee
+where  not salary >= 2000
+and salary < 3000;
+
+select ename, job, hiredate from employee
+where hiredate >= '1981/2/20'
+and hiredate <= '1981/5/1';
+
+select ename,dno from employee
+where dno in(20,30)
+order by ename desc;
+
+select ename, salary, dno from employee
+where salary >= 2000
+and salary <=3000
+and dno >= 20
+order by ename asc;
+
+select ename, hiredate from employee
+where hiredate like '81%';
+
+select ename, job from employee
+where manager is null;
+
+select *from employee;
+
+select ename, salary, commission from employee
+where commission is not null
+order by commission desc;
+
+select ename from employee
+where ename like '__R%';
+
+select ename from employee
+where ename like '%R%'
+and ename like '%A%';
+
+select ename, job, salary from employee
+where job in ('CLERK','SALESMAN')
+and not salary in (1600,950,1300);
+
+select ename, salary, commission from employee
+where commission >=500;
