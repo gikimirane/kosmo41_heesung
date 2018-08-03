@@ -26,30 +26,30 @@ public class BatchInsertEx {
 		try {
 			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
 			stmt = con.createStatement();
-			sql = "create table test4 ("+
+			sql = "create table test5 ("+
 					" id varchar2(10),"+
 					" password varchar2(10) )";
 			stmt.executeUpdate(sql);
 			
 			con.setAutoCommit(false);
 			
-			stmt.addBatch("INSERT INTO test4 "+"VALUES('홍길동','1111')");
-			stmt.addBatch("INSERT INTO test4 "+"VALUES('전우치','2222')");
-			stmt.addBatch("INSERT INTO test4 "+"VALUES('손오공','3333')");
-			stmt.addBatch("INSERT INTO test4 "+"VALUES('장희성','4444')");
+			stmt.addBatch("INSERT INTO test5 "+"VALUES('홍길동','1111')");
+			stmt.addBatch("INSERT INTO test5 "+"VALUES('전우치','2222')");
+			stmt.addBatch("INSERT INTO test5 "+"VALUES('손오공','3333')");
+			stmt.addBatch("INSERT INTO test5 "+"VALUES('장희성','4444')");
 			
 			int [] updateCounts = stmt.executeBatch();
 			commit = true;
 			con.commit();
 			
-			rs = stmt.executeQuery("select*from test4");
+			rs = stmt.executeQuery("select*from test5");
 			while(rs.next()) {
 				String id = rs.getString("id");
 				String password = rs.getString("password");
 				System.out.println("id :"+ id+", password :"+password);
 			}
 			//----------------------------------------------------
-			sql = "drop table test4";
+			sql = "drop table test5";
 			stmt.executeUpdate(sql);
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();

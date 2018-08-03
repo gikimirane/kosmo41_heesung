@@ -35,17 +35,26 @@ public class Sender5 extends Thread {
 					out.println(s2);
 					continue;
 				}
-				if(s2.substring(0, 2).equals("/r")) {
+				 if(s2.length()>2&&s2.substring(0, 2).equals("/r")) {
 					out.println(s2);
 					continue;
 					
 				}
-				if(s2.substring(0, 3).equals("/to")) {
-				
-					out.println("/to"+s2);
-					
-					continue;
-					
+				if(s2.length()>3&&s2.substring(0, 3).equals("/to")) {
+					out.println(s2);
+					String e[] = s2.split(" ");
+					String a=e[1];
+					for(;;) {
+						String b = s.nextLine();
+						if(b.equals("//to")||b.equals("//TO")) {
+							break;
+						}
+						out.println("/to "+a+" "+b);
+						
+					}
+//					do {
+//						out.println("/to "+name+" "+s2);
+//					}while(s2.length()>4&&s2.substring(0, 3).equals("//to"));
 				}
 			else {
 				out.println(name+"=>"+s2);
