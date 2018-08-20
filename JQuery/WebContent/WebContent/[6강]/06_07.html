@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+	<script>
+	
+		function createRequest(){
+			var request;
+			try{
+				request = new XMLHttpRequest();
+			}catch(exception){
+				
+			}
+			return request;
+		}
+		var request = new XMLHttpRequest();
+		request.open('GET','data.html',false);
+		
+		request.send();
+		
+		document.body.innerHTML += request.responseText;
+	</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+	<script>
+		function createRequest(){
+			var request;
+			try{
+				request = new XMLHttpRequest();
+			}catch(exception){
+				try{
+					request = new ActiveXObject('Msxml2.XMLHTTP');
+				}catch(innerException){
+					request = new ActiveXObject('Microsoft.XMLHTTP');
+				}
+			}
+			return request;
+		}
+		var request = createRequest();
+		request.open('GET','/JQuery/data.html',false);
+		
+		//send() 메서드에 소비되는 시간 측정
+		var prevDate = new Date();
+		request.send();
+		var nowDate = new Date();
+		
+		alert(nowDate - prevDate);
+	</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('h1').toggle(function(){
+				$(this).next().hide('slow');
+			}, function(){
+				$(this).next().show('slow');
+			});
+		});
+		//안좋은 예 이렇게는 쓰지말자
+	</script>
+</head>
+<body>
+ <h1>OPEN @ CLOSE</h1>
+	<div>
+		<h1>wqd afwq</h1>
+		<p>qwdsadwn , dnqwnfdlf wkfmnk dsadwdas. </p>
+	</div>
+	<h1>OPEN @ CLOSE</h1>
+	<div>
+		<h1>wqd afwq</h1>
+		<p>qwdsadwn , dnqwnfdlf wkfmnk </p>
+	</div>
+</body>
+</html>

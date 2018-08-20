@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<style>
+		div{
+			width: 100px; height: 100px;
+			background-color: Orange;
+			position: relative;
+		}
+	</style>
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+		$(document).ready(function(){		
+			$('div').each(function(index){
+				$(this).delay(index*500).animate({
+					left: 500
+				},'fast');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div></div><div></div>
+	<div></div><div></div>
+	<div></div><div></div>
+</body>
+</html>
