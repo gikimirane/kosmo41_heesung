@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h3>텍스트가 자동 회전하며, 마우스 클릭시 중단</h3>
+	<hr>
+	<div>
+		<span id="div" style="background-color: yellow">
+			좋은 날 미리 메리 크리스마스</span>
+	</div>
+	<script>
+		var div=document.getElementById("div");
+		var timerID = setInterval("doRotate()",100);//200밀리초 주기로 do호출
+		
+		div.onclick = function(e){
+			clearInterval(timerID);//타이머 해제. 문자열 회전 중단
+		}
+		
+		function doRotate(){
+			var str = div.innerHTML;
+			var firstChar = str.substr(0,1);
+			var remains = str.substr(1,str.length-1);
+			str=remains+firstChar;
+			div.innerHTML = str;
+		}
+	</script>
+</body>
+</html>

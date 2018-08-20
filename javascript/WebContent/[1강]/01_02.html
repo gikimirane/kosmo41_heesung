@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+function over(obj){
+	obj.src="media/banana.png";
+}
+function out(obj){
+	obj.src="media/apple.png";
+}
+</script>
+</head>
+<body>
+	<h3>마우스 올려 보세요</h3>
+	<hr/>
+	<img alt="이미지" src="media/apple.png"
+			onmouseover="over(this)"
+			onmouseout="out(this)">
+</body>
+</html>

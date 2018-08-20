@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+		$(document).ready(function(){
+			//5초후에 코드를 실행합니다.
+			setTimeout(function(){
+				var value = $('select > option:selected').val();
+				//출력
+				alert(value);
+			},5000);
+			
+		});
+	</script>
+</head>
+<body>
+	<select>
+		<option>Apple</option>
+		<option>Bag</option>
+		<option>Dog</option>
+		<option>Cat</option>
+		<option>Appleln</option>
+	</select>
+</body>
+</html>
