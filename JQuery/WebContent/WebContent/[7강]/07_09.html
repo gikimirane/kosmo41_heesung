@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+		$(document).ready(function(){
+			$.ajax({
+				url:'date.xml',
+				success: function(data){
+					$(data).find('product').each(function(){
+						
+					});
+				};
+			});
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>

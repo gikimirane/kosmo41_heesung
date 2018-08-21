@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+		function form_check(){
+			submit_ajax();
+		}
+		
+		function submit_ajax(){
+			var vName1 = document.getElementById("name").value;
+			alert("aaaa:["+vName1+"]");
+			
+			var vName2 = $("#name").val();
+			alert("bbbbb:["+vName2+"]");
+			
+			var queryString1 = $("form[name=testForm]").serialize();
+			alert(queryString1);
+			
+			var queryString2 = jQuery("#testForm").serialize();
+			alert(queryString2);
+			
+			//이걸 제일 많이 사용. #은 id
+			var queryString3 = $("#testForm").serialize();
+			alert(queryString3);
+			
+			$.ajax({
+				url :'/JQuery/data.html',
+				type:'GET',
+				data:queryString3,
+				dataType: 'json',
+				error: function(xhr, status, error){
+					alert(error);
+				},
+				success:function(json){
+					alert(json)
+				}
+			});
+			
+		}
+	</script>
+</head>
+<body>
+	<form id="testForm" name="testForm">
+		이름<input type="text" name="name" id="name" value="jang hee-sung"/><br>
+		아이디<input type="text" name="id" id="id" value="123456789"/><br><p>
+		<input type="button" value="Ajax 폼 전송!" onclick="form_check()"/>
+	
+	</form>
+</body>
+</html>
