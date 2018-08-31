@@ -25,6 +25,8 @@
     <!--
     <Manager pathname="" />
     -->
+    <resources mapping="/resources/**" location="/resources/" />
+    <resources mapping="/common/**" location="/resources/" />
      <Resource
     	name="jdbc/Oracle11g"
     	auth="Container"
