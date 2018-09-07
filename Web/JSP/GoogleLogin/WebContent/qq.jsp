@@ -18,25 +18,16 @@
 		console.log('Image URL: ' + profile.getImageUrl());
 		console.log('Email: ' + profile.getEmail());
 
-    	
-    	$('#nick').attr('value',profile.getName());
     	alert(profile.getName())
     	
-    	document.google.submit();
+    	document.location.href="google.jsp?nick="+profile.getName();
 	}
     	
 
 	</script>
 </head>
 <body>
-
-	<form name="google" action="google.jsp" class="container">
-			<input type="hidden" id="nick" name="nick" value="">
-			<div id="login" class="g-signin2" data-onsuccess="onSignIn"></div>	
-	</form>
-
-
-
+	<div id="login" class="g-signin2" data-onsuccess="onSignIn"></div>	
 
 </body>
 </html>

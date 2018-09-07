@@ -118,7 +118,7 @@
 				<c:choose>
 				<c:when test="${content_view.bName == nick }">
 					<a href="modify_view.do?bId=${content_view.bId }&table=${ctable}">수정</a>&nbsp;&nbsp;
-					<ahref="list.do?page=<%= session.getAttribute("cpage") %>&table=${ctable}&search=<%= session.getAttribute("csearch")%>">목록보기</a> &nbsp;&nbsp;
+					<a href="list.do?page=<%= session.getAttribute("cpage") %>&table=${ctable}&search=<%= session.getAttribute("csearch")%>">목록보기</a> &nbsp;&nbsp;
 					<a href="delete.do?bId=${content_view.bId }&table=${ctable}">삭제</a>&nbsp;&nbsp;
 					<a href="reply_view.do?bId=${content_view.bId }&table=${ctable}">답변</a></td>
 				</c:when>

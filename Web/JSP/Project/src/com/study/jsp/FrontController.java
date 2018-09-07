@@ -14,6 +14,7 @@ import com.study.jsp.command.BCommand;
 import com.study.jsp.command.BContentCommand;
 import com.study.jsp.command.BDeleteCommand;
 import com.study.jsp.command.BDownCommand;
+import com.study.jsp.command.BGoogleCommand;
 import com.study.jsp.command.BListCommand;
 import com.study.jsp.command.BModifyCommand;
 import com.study.jsp.command.BReplyCommand;
@@ -105,9 +106,12 @@ public class FrontController extends HttpServlet {
 		}else if (com.equals("/start.do")) {
 			viewPage = "startPage.jsp";
 		}else if (com.equals("/download.do")) {
-			System.out.println("adfasdf");
 			command = new BDownCommand();
 			command.execute(request, response);
+		}else if (com.equals("/google.do")) {
+			command = new BGoogleCommand();
+			command.execute(request, response);
+			viewPage = "main.jsp";
 		}
 		
 		

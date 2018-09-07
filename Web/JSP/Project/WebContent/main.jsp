@@ -8,8 +8,9 @@
 	}
 	String nick = (String)session.getAttribute("nick");
 	String id = (String)session.getAttribute("id");
+	int login = (int)session.getAttribute("login");
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -26,18 +27,64 @@
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 		crossorigin="anonymous"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script>
-		function out() {
-		    var auth2 = gapi.auth2.getAuthInstance();
-		    auth2.out().then(function () {
-		    	console.log('User signed out.');
-	
-		    	$('#nick').attr('value', '');
-		    });
-		    
-		    document.location.href="logout.jsp";
-		}
-	</script>
+<script>
+	function signOut() {
+		
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function() {
+			console.log('User signed out.');
+
+		});
+		document.location.href = "logout.jsp";
+	}
+	function onLoad() {
+		gapi.load('auth2', function() {
+			gapi.auth2.init();
+		});
+	}
+</script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '238447546838563',
+      cookie     : false,
+      xfbml      : false,
+      version    : 'v3.1'
+    });
+
+    FB.getLoginStatus(function(unknown) {
+    	console.log(response);
+      statusChangeCallback(response);
+    });
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  function statusChangeCallback(response) {
+    if (response.status === 'connected') {
+    } else {
+      $('#login').css('display', 'block');
+      $('#logout').css('display', 'none');
+      $('#uname').html('');
+    }
+  }
+
+  function fbLogout () {
+    FB.logout(function(response) {
+      statusChangeCallback(response);
+    });
+    document.location.href="logout.jsp";
+  }
+
+
+</script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -65,7 +112,7 @@
 			<li class="nav-item active"><a class="nav-link" href="main.jsp">Home
 					<span class="sr-only"></span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">채팅방</a></li>
+			<li class="nav-item"><a class="nav-link" href="client.jsp">채팅방</a></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -101,8 +148,13 @@
         	<h1 class="h3 mb-3 font-weight-normal"> <%= nick %> 님 어서오세요!</h1>
         	<p>저희 사이트는 여러분들의 경험을 나누는 곳입니다.<br> 위 상단 메뉴에 음식별로 게시판이 있으니 서로 정보를 공유하세요!<br> 그 외에도 서로의 정보를
         		나눌 수 있는 채팅방<br> 오늘의 메뉴를 추천해주는 기능 등 여러가지 기능도 있으니 사용하여 주세요!</p>
-        	<a type="button" href="logout.jsp">로그아웃</a>
+        	<%if(login == 1){ %>
+        	<a type="button" href="#" onclick="signOut();">로그아웃</a>
+        	<%}else if(login == 2){ %>
+        	<input type="button" onclick="fbLogout();" value="로그아웃" />
+        	<%} %>
       	</div>
-    </form>	
+    </form>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>	
 </body>
 </html>

@@ -37,6 +37,7 @@
 			session.setAttribute("id", id);
 			session.setAttribute("nick", nick);
 			session.setAttribute("ValidMem", "yes");
+			session.setAttribute("login",(int)1);
 			response.sendRedirect("main.jsp");
 		}
 	}

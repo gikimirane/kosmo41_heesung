@@ -29,23 +29,70 @@
 			var profile = googleUser.getBasicProfile();
 			console.log('ID: ' + profile.getId());
 			console.log('Name: ' + profile.getName());
-			console.log('Image URL: ' + profile.getImageUrl());
-			console.log('Email: ' + profile.getEmail());
 
-
-	    	$('#nick').attr('value',profile.getName());
+			alert("구글 로그인 성공!");
 	    	
-	    	document.zz.submit();
+	    	document.location.href="google.do?nick="+profile.getName()+"&login=1";
 		}
 
 	</script>
-  </head>
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId : '238447546838563',
+				cookie : true,
+				xfbml : true,
+				version : 'v3.1'
+			});
+
+			FB.getLoginStatus(function(response) {
+				console.log(response);
+			});
+		};
+
+		// Load the SDK asynchronously
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	
+		function statusChangeCallback(response) {
+			if (response.status === 'connected') {
+				getINFO();
+			} else {
+				$('#login').css('display', 'block');
+				$('#logout').css('display', 'none');
+				$('#uname').html('');
+			}
+		}
+
+		function fbLogin() {
+			FB.login(function(response) {
+				statusChangeCallback(response);
+			}, {
+				scope : 'public_profile, email'
+			});
+		}
+		function getINFO() {
+			FB.api('/me?fields=id,name,picture.width(100).height(100).as(picture_small)',function(response) {
+					console.log(response);
+					alert("페이스북 로그인 성공!");
+					document.location.href = "google.do?nick="+ response.name+"&login=2";
+				});
+		}
+	</script>
+</head>
 
 <body>
  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <form name="zz" class="form-signin" action="loginOk.jsp" method="post">
+    <form  class="form-signin" action="loginOk.jsp?" method="post">
     	<div class="text-center mb-4">
         	<h1 class="h3 mb-3 font-weight-normal">어서오세요!</h1>
         	<p>저희 사이트는 회원들만 이용할 수 있습니다.<br>회원이 아니면 <code><a href="join.jsp">회원가입</a></code> 버튼을 눌러 가입해 주세요.</a></p>
@@ -68,7 +115,14 @@
         	</label>
       	</div>
       	<button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button><br/>
-		<div id="login" class="g-signin2" data-onsuccess="onSignIn"></div>
+		<table border="0">
+			<td co><div id="login" class="g-signin2" data-onsuccess="onSignIn"></div></td>
+			<td>&nbsp;&nbsp;</td>
+			<td>
+				<a type="button" href="#" onclick="fbLogin();">
+				<img src="img/facebook.png" width="120px" height="37px"></a>
+			</td>
+		</table>
 		<p class="mt-5 mb-3 text-muted text-center">&copy; 2018</p>	
 	</form>
 </body>
