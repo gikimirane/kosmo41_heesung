@@ -42,7 +42,7 @@
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a
-		class="navbar-brand" href="#" align="center">Kosmo</a>
+		class="navbar-brand" href="main.jsp" align="center">Kosmo</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#navbarSupportedContent"
 		aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -55,7 +55,7 @@
 			<li class="nav-item active"><a class="nav-link" href="main.jsp">Home
 					<span class="sr-only"></span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">채팅방</a></li>
+			<li class="nav-item"><a class="nav-link" href="client.jsp">채팅방</a></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"

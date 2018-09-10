@@ -33,9 +33,9 @@ public class BDao {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String query = "insert into mvc_board"+
+		String query = "insert into mvc_board "+
 					   "(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, tableNum,filename) "+
-					   "values "+
+					   " values "+
 					   "(mvc_board_seq.nextval,?,?,?, 0, mvc_board_seq.currval, 0, 0, ?,?)";
 		
 		try {

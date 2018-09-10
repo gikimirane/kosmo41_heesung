@@ -17,7 +17,7 @@
 <body>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a class="navbar-brand" href="#" align="center">Kosmo</a>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a class="navbar-brand" href="main.jsp" align="center">Kosmo</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -28,9 +28,9 @@
 			<li class="nav-item active"><a class="nav-link" href="main.jsp">Home
 					<span class="sr-only"></span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">채팅방</a></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+			<li class="nav-item"><a class="nav-link" href="client.jsp">채팅방</a></li>
+			<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false"> 게시판 </a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -39,9 +39,11 @@
 					<a class="dropdown-item" href="list.do?table=2">분식게시판</a> 
 					<a class="dropdown-item" href="list.do?table=3">양식게시판</a> 
 					<a class="dropdown-item" href="list.do?table=4">일식게시판</a>
-				</div></li>
-			<li class="nav-item"><a class="nav-link disabled" href="#">오늘의
-					추천 메뉴</a></li>
+				</div>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link disabled" href="#">오늘의 추천 메뉴</a>
+			</li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
 			<input class="form-control mr-sm-2" type="search"
