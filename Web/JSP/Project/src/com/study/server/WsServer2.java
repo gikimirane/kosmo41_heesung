@@ -4,6 +4,13 @@ package com.study.server;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -30,6 +37,7 @@ import javax.websocket.server.ServerEndpoint;
 			e.printStackTrace();
 		}	
 	}
+	List<String> roomlist = new ArrayList<>();
 	
 	private static final java.util.Map<String, Session> user =
 			java.util.Collections.synchronizedMap(new java.util.HashMap<String, Session>());
@@ -41,9 +49,9 @@ import javax.websocket.server.ServerEndpoint;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = "insert into chat "+
-						" (nick, sessions, room) "+
+						" (nick, sessions, room,roomnumber,roompw,super) "+
 						"values "+
-						"(?, ?, '대기실') ";
+						"(?, ?, '대기실',0,0,0) ";
 		try {
 			con = dataSource.getConnection();
 			pstmt = con.prepareStatement(query);
@@ -63,19 +71,162 @@ import javax.websocket.server.ServerEndpoint;
 		}
 	}
 	
+	public void roomcreate(String nick,String session,String roomname, String roompw) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		String query = "update chat set "+
+						" room='"+roomname+"', roompw='"+roompw+"', super='super' "+
+						" where nick='"+nick+"'";
+		String query1 = "insert into roomlist (roomlist) values (?)";
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			pstmt.executeUpdate();
+			pstmt = con.prepareStatement(query1);
+			pstmt.setString(1, roomname);
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("방만들떄에러");
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void roomlist(String nick,Session session) {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		String roomlist ="";
+		
+		String query = "select * from roomlist";
+		try {
+			con = dataSource.getConnection();
+			stmt = con.createStatement();
+			resultSet = stmt.executeQuery(query);
+			while(resultSet.next()) {
+				roomlist += resultSet.getString(1)+"\n";
+				System.out.println(roomlist);
+			}
+			System.out.println("11111");
+			session.getBasicRemote().sendText("/roomlist"+":"+roomlist);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("방리스트에러");
+		} finally {
+			try {
+				if(resultSet != null) resultSet.close();
+				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void roomvisit(String nick,String session,String roomname) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String query = "update chat set "+
+						" room='"+roomname+"'"+
+						" where nick='"+nick+"'";
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			pstmt.executeUpdate();	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("방만들떄에러");
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void roomtalk(String nick,Session session,String msg) {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		ResultSet resultSet1 = null;
+		String nickname ="";
+		String room = "";
+
+		try {
+			con = dataSource.getConnection();
+			stmt = con.createStatement();
+			resultSet = stmt.executeQuery("select room from chat where nick='"+nick+"'");
+			if(resultSet.next()) {
+				room = resultSet.getString(1);
+			}
+			resultSet1 = stmt.executeQuery("select nick from chat where room='"+room+"'");
+			while(resultSet1.next()) {
+				nickname = resultSet1.getString(1);		
+				session = user.get(nickname);
+				session.getBasicRemote().sendText(nick+" : "+msg);
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("방채팅");
+		} finally {
+			try {
+				if(resultSet != null) resultSet.close();
+				if(resultSet1 != null) resultSet1.close();
+				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void close(String nick,Session session) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String query = "delete from chat where nick='"+nick+"'";
+
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			pstmt.executeUpdate();	
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("close");
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private void sendSoloSessionToMessage(Session self, String message) {
 		try {
 			String msg[] = message.split(":| ");
+			String me = msg[0].toString();
 			String nick = msg[2].toString();
 			String msgput = "";
-			self = user.get(nick);
-			System.out.println(self);
+			Session selfs = user.get(nick);
 			for(Session session : WsServer2.sessions) {
-				if(session.getId().equals(self.getId())) {
+				if(session.getId().equals(selfs.getId())) {
 					for(int i=3;i<msg.length;i++) {
 						msgput += msg[i];
 					}
-					session.getBasicRemote().sendText(msgput);
+					self.getBasicRemote().sendText(nick+"님에게 :"+msgput);
+					session.getBasicRemote().sendText(me+"님의 귓속말 :"+msgput);
 				}
 			}
 		} catch (IOException e) {
@@ -83,7 +234,17 @@ import javax.websocket.server.ServerEndpoint;
 		}
 	}
 	
-	
+	private void AllMsg(Session self, String message) {
+		try {
+			for(Session session : WsServer2.sessions) {
+				if(! self.getId().equals(session.getId()))
+					//여기가 메세지 클라이언트쪽에 보내주는거//메세지 받는거.
+					session.getBasicRemote().sendText(message);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
@@ -103,49 +264,59 @@ import javax.websocket.server.ServerEndpoint;
 	public void onClose(Session session) {
 		System.out.println("Session "+session.getId()+"has ended");
 		sessions.remove(session);
+		Set set = user.keySet();
+		Iterator iterator = set.iterator();
+		while(iterator.hasNext()) {
+			String key = (String)iterator.next();
+			Session a = user.get(key);
+			if(session.getId().equals(a.getId())) {
+				roomtalk(key,session,"님이 퇴장하셨습니다.");
+				close(key,session);
+				user.remove(key);
+				break;
+			}
+		}
 	}
 	
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println("Message from "+session.getId()+":"+message);
-		final Basic basic = session.getBasicRemote();
 		try {
 			String nick[] = message.split(":| ");
 			String nickname = nick[0].toString();
+			String msg = "";
+			for(int i=1; i <nick.length;i++) {
+				msg +=nick[i];
+			}
 			boolean containsKey = user.containsKey(nickname);
-			System.out.println("111");
 			if(containsKey == true) {
 				if(nick[1].equals("/r")) {
-						sendSoloSessionToMessage(session,message);			
-					}else {
-						basic.sendText(message);
-						sendAllSessionToMessage(session, message);
-					}
-				System.out.println("2222");
+					sendSoloSessionToMessage(session,message);			
+				}
+				else if(nick[1].equals("/roomcreate")) {
+					roomcreate(nickname,session.getId(),nick[2],nick[3]);
+				}
+				else if(nick[1].equals("/roomlist")) {
+					roomlist(nickname,session);
+				}
+				else if(nick[1].equals("/roomvisit")) {
+					roomvisit(nickname,session.getId(),nick[2]);
+				}
+				else {
+					roomtalk(nickname,session,msg);
+				}
 			}else if(containsKey == false) {
 				user.put(nickname,session);
 				open(nick[0],session.getId());
-				sendAllSessionToMessage(session, nick[0]+"님이 입장하셨습니다.");
-				System.out.println("333");
-				System.out.println(user.keySet().toString());
+				roomtalk(nickname,session,"님이 퇴장하셨습니다.");
 			}
 			//내가 보낸 메세지.
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		//메시지 받는곳
 	}
-	private void sendAllSessionToMessage(Session self, String message) {
-		try {
-			for(Session session : WsServer2.sessions) {
-				if(! self.getId().equals(session.getId()))
-					//여기가 메세지 클라이언트쪽에 보내주는거//메세지 받는거.
-					session.getBasicRemote().sendText(message);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	@OnError
 	public void onError(Throwable e, Session session) {
