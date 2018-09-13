@@ -22,7 +22,7 @@
 <body>
 	<%
 		String id = (String)session.getAttribute("nick");
-	
+		String num = "";
 		if(id==null){
 	%>
 	<jsp:forward page="startPage.jsp"/>
@@ -42,13 +42,16 @@
 					<h2 id="chatroom"></h2>
 				</div>
 			</td>
-			<td align="center" style="width:200px">
+			<td align="center" style="width:150px">
 				<button type="button" onclick="openSocket();">접속</button>&nbsp;
 				<button type="button" onclick="closeSocket();">종료</button>
 			</td>
-			<td align="center" style="width:200px">
-				<button type="button" onclick="roomcreate();">방 만들기</button>&nbsp;
-				<button type="button" onclick="roomnamelist();">방 목록보기</button>
+			<td align="center" style="width:150px">
+				<button type="button" id="rc" style="display: block;"  onclick="roomcreate();">방 만들기</button>
+				<button type="button" id="re" style="display: none;" onclick="roomout();">방 나가기</button>
+			</td>
+			<td style="width:200px">
+				<button type="button" style="display: block;" onclick="roomnamelist();">방 목록</button>
 			</td>
 		</tr>
 	</table>
@@ -58,20 +61,37 @@
 		<col width="300px">
 		<tr>
 			<td style="width: 550px" colspan="2">
-				<textarea id="messages" cols="60" rows="30" redonly="ture" ></textarea>
+				<textarea id="messages" cols="60" rows="30" readonly></textarea>
 				<input type="text" id="messageinput" size="60" onkeypress="if(event.keyCode==13){send();}"/>
 				<button type="button" onclick="send();">메세지 보내기</button>
+				<div id="super" style="display: none;">
+					<input type="text" id="user" size="10" placeholder="강퇴할 닉네임">
+					<button type="button" onclick="userout();">강퇴</button>
+					<input type="text" id="invite" size="10" placeholder="초대할 닉네임">
+					<button type="button" onclick="userinvite();">초대</button>
+					<button type="button" onclick="roomend();">채팅방 닫기</button>		
+				</div>
 			</td>
 			<td style="width: 300px">
 				<div id="room" style="display: none;">
 					<h2>방 생성</h2>
 					<input type="text" id="roomid" size="15" placeholder="방제목" required autofocus>
 					<input type="password" id="roompw" size="15" placeholder="비밀번호"><br>
-					<button type="button" onclick="roomc();" align="center">확인</button>&nbsp;
+					<h5>인원 수</h5>
+					<input type="radio" name="human" value="2" checked>2명
+					<input type="radio" name="human" value="4" >4명
+					<input type="radio" name="human" value="6" >6명
+					<input type="radio" name="human" value="8" >8명<br>
+					<small>* 미체크시 2명 고정입니다.</small>
+					<button type="submit" onclick="roomc();">확인</button>&nbsp;
 					<button type="button" onclick="roomn();">취소</button>
 				</div>
+				<div>
+					<h2>전체유저 리스트</h2>
+					<textarea id="userlist" cols="20" rows="10" readonly></textarea>
+				</div>
 				<h2>방 목록</h2>
-				<textarea id="roomlist" cols="20" rows="10" value="" placeholder="방 목록을 보시려면 방목록 버튼을 눌러주세요"></textarea>
+				<textarea id="roomlist" cols="20" rows="10" placeholder="방 목록을 보시려면 방목록 버튼을 눌러주세요" readonly></textarea>
 				<input type="text" id="roomname" size="20" onkeypress="if(event.keyCode==13){send();}"/>
 				<button type="button" onclick="roomvisit()">방 입장하기</button>
 			</td>
@@ -108,6 +128,7 @@
 		//방 관련 -----------------------------------------------------
 	 	function roomcreate(){
 			$('#room').css('display','block');
+			
 		}
 	 	function roomc(){
 	 		var id = "<%= id %>";
@@ -121,16 +142,22 @@
 	 		if(roompw==""){
 	 			roompw= 0;
 	 		}
+	 		var humannum = $('input[name="human"]:checked').val();
+	 		
 	 		alert(roomid+" 방을 개설하셨습니다.");
 	 		$('#chatname').css('display','none');
 	 		$('#chatname1').css('display','block');
 	 		document.getElementById("chatroom").innerHTML=roomid+" 방";
 	 		document.getElementById("messages").innerHTML="";
 	 		$('#room').css('display','none');
-	 		webSocket.send(id+":"+"/roomcreate"+":"+roomid+":"+roompw);
+	 		$('#super').css('display','block');
+	 		$('#rc').css('display','none');
+	 		$('#re').css('display','block');
+	 		webSocket.send(id+":"+"/roomcreate"+":"+roomid+":"+roompw+":"+humannum);
 	 		document.getElementById("roompw").value="";
 	 		document.getElementById("roomid").value="";
 	 	}
+	 	
 	 	function roomn(){
 	 		$('#room').css('display','none');
 	 	}
@@ -140,21 +167,97 @@
 	 		var id = "<%= id %>";
 	 		webSocket.send(id+":"+"/roomlist");
 	 	}
-	 	
+	 	function roomvisitcheck(texted){
+	 		alert(texted+" 방에 입장하셨습니다.")
+	 		$('#chatname').css('display','none');
+	 		$('#chatname1').css('display','block');
+	 		$('#rc').css('display','none');
+	 		$('#re').css('display','block');
+	 		document.getElementById("chatroom").innerHTML=texted+" 방";
+	 		document.getElementById("messages").innerHTML="";
+	 		document.getElementById("roomname").value = "";
+	 	}
 	 	function roomvisit(){
 	 		var id = "<%= id %>";
 	 		var roomname = document.getElementById("roomname").value;
-	 		alert(roomname+" 방에 입장하셨습니다.")
-	 		$('#chatname').css('display','none');
-	 		$('#chatname1').css('display','block');
-	 		document.getElementById("chatroom").innerHTML=roomname+" 방";
-	 		document.getElementById("messages").innerHTML="";
 	 		webSocket.send(id+":"+"/roomvisit"+":"+roomname);
-	 		document.getElementById("roomname").value = "";
+	 	}
+	 	
+	 	function userout(){
+	 		var id = "<%= id %>";
+	 		var user = document.getElementById("user").value;
+	 		webSocket.send(id+":"+"/out"+":"+user);
+	 	}
+	 	
+	 	function outalert(texted){
+	 		alert(texted);
+	 		document.getElementById("messages").innerHTML="";
+	 		$('#rc').css('display','block');
+	 		$('#re').css('display','none');
+	 	}
+	 	
+	 	function roomend(){
+	 		var id = "<%= id %>";
+	 		webSocket.send(id+":"+"/roomend");
+	 	}
+	 	
+	 	function roomoutre(texted){
+	 		alert(texted);
+	 		document.getElementById("messages").innerHTML="";
+	 		$('#rc').css('display','block');
+	 		$('#re').css('display','none');
+	 	}
+	 	
+	 	function roomout(){
+	 		var id = "<%= id %>";
+	 		webSocket.send(id+":"+"/roomout");
+	 		document.getElementById("messages").innerHTML="";
+	 		$('#rc').css('display','block');
+	 		$('#re').css('display','none');
+	 		$('#chatname').css('display','block');
+	 		$('#chatname1').css('display','none');
+	 		$('#super').css('display','none');
+	 	}
+	 	
+	 	function superblock(){
+	 		alert("방장이 되셨습니다.");
+	 		$('#super').css('display','block');
+	 	}
+	 	
+	 	function userinvite(){
+	 		alert("초대메세지를 보냈습니다.");
+	 		var id = "<%= id %>";
+	 		var invite = document.getElementById("invite").value;
+	 		webSocket.send(id+":"+"/userinvite"+":"+invite);
+	 	}
+	 	function invitecheck(texted){
+	 		var text = texted;
+	 		var dd = confirm(text+"수락은 확인 거절은 취소를 눌러주세요");
+	 		
+	 		if(dd){
+	 			yes(text);
+	 		}else{
+	 			no(text);
+	 		}
+	 	}
+	 	
+	 	function yes(text){
+	 		var id = "<%= id %>";
+	 		var textedS = text.split(" ");
+	 		webSocket.send(id+":"+"/roomvisit"+":"+textedS[2]);
+	 	}
+	 	
+	 	function no(text){
+	 		var id = "<%= id %>";
+	 		var textedS = text.split(" ");
+	 		webSocket.send(id+":"+"/no"+":"+textedS[0]);
 	 	}
 		//------------------------------------------------------------
 		
-		
+		function userlistcheck(texted){
+			document.getElementById("userlist").innerHTML="";
+			userlist.innerHTML += texted;
+		}
 		function send(){
 			var id = "<%= id %>";
 			var text = document.getElementById("messageinput").value;
@@ -172,10 +275,36 @@
 			webSocket.send(id+":");
 		}
 		function writeResponse(text){
-			var roomliste = text.split(":");
-			if(roomliste[0]=="/roomlist"){
-				roomlist.innerHTML += roomliste[1]+"\n";
-			}else{
+			var texted = text.split(":");
+			if(texted[0]=="/roomlist"){
+				roomlist.innerHTML += texted[1]+"\n";
+			}
+			else if(texted[0]=="/userlist"){
+				userlistcheck(texted[1]);
+			}
+			else if(texted[0]=="/userout"){
+				outalert(texted[1]);
+			}
+			else if(texted[0]=="/roomend"){
+				roomoutre(texted[1]);
+			}
+			else if(texted[0]=="/super"){
+				superblock();
+			}
+			else if(texted[0]=="/humanend"){
+				alert("방에 인원이 다찼습니다.")
+			}
+			else if(texted[0]=="/humanok"){
+				roomvisitcheck(texted[1]);
+			}
+			else if(texted[0]=="/invite"){
+				alert("초대")
+				invitecheck(texted[1]);
+			}
+			else if(texted[0]=="/no"){
+				alert(texted[1]+" 님이 거절하셨습니다.")
+			}
+			else{
 				messages.innerHTML += text+"\n";
 				messages.scrollTop = messages.scrollHeight;
 			}
