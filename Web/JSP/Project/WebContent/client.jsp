@@ -7,19 +7,23 @@
 <head>
 <script src="http://code.jquery.com/jquery.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
 <title>Chat Client</title>
-<style>
-	.left-box{
-		position: absolute;
-		top: 50; left: 0;
-	}
-	.right-box{
-		position: absolute;
-		top: 50; right: 0;
-	}
-</style>
+
 </head>
 <body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+ 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 	<%
 		String id = (String)session.getAttribute("nick");
 		String num = "";
@@ -31,7 +35,46 @@
 		session.setAttribute("uid", id);
 		}
 	%>
-	<div class="container">
+	
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a
+		class="navbar-brand" href="main.jsp" align="center">동물이야기</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse"
+		data-target="#navbarSupportedContent"
+		aria-controls="navbarSupportedContent" aria-expanded="false"
+		aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active"><a class="nav-link" href="main.jsp">Home
+					<span class="sr-only"></span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="client.jsp">채팅방</a></li>
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> 게시판 </a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="list.do?table=0">강아지 아빠 게시판</a>
+					<a class="dropdown-item" href="list.do?table=1">고양이 집사 게시판</a> 
+					<a class="dropdown-item" href="list.do?table=2">그 외 동물들 게시판</a> 
+					<a class="dropdown-item" href="list.do?table=3">분양 게시판</a> 
+					<a class="dropdown-item" href="list.do?table=4">꿀팁 게시판</a>
+				</div></li>
+			<li class="nav-item"><a class="nav-link disabled" href="#">게임방</a></li>
+		</ul>
+		<form class="form-inline my-2 my-lg-0">
+			<input class="form-control mr-sm-2" type="search"
+				placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	</div>
+	</nav>
+	<br />
+	<hr>
+	<br />
+	<div>
 	<table style="width: 900px;">
 		<tr>
 			<td align="center" style="width:600px;">

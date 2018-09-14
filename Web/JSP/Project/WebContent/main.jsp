@@ -99,7 +99,7 @@
 
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> 
-		<a class="navbar-brand" href="main.jsp" align="center">Kosmo</a>
+		<a class="navbar-brand" href="main.jsp" align="center">동물이야기</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -118,14 +118,13 @@
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"> 게시판 </a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="list.do?table=0">한식게시판</a>
-						<a class="dropdown-item" href="list.do?table=1">중식게시판</a> 
-						<a class="dropdown-item" href="list.do?table=2">분식게시판</a> 
-						<a class="dropdown-item" href="list.do?table=3">양식게시판</a> 
-						<a class="dropdown-item" href="list.do?table=4">일식게시판</a>
+						<a class="dropdown-item" href="list.do?table=0">강아지 아빠 게시판</a>
+						<a class="dropdown-item" href="list.do?table=1">고양이 집사 게시판</a> 
+						<a class="dropdown-item" href="list.do?table=2">그 외 동물들 게시판</a> 
+						<a class="dropdown-item" href="list.do?table=3">분양 게시판</a> 
+						<a class="dropdown-item" href="list.do?table=4">꿀팁 게시판</a>
 					</div></li>
-				<li class="nav-item"><a class="nav-link disabled" href="#">오늘의
-						추천 메뉴</a></li>
+				<li class="nav-item"><a class="nav-link disabled" href="#">게임방</a></li>
 			</ul>
 			<form class="form-inline my-2 my-lg-0" action="list.do">
 				<select class="custom-select" id="table" name="table">
@@ -146,8 +145,8 @@
 	<form class="form-signin container" action="loginOk.jsp" method="post">
     	<div class="text-center mb-4">
         	<h1 class="h3 mb-3 font-weight-normal"> <%= nick %> 님 어서오세요!</h1>
-        	<p>저희 사이트는 여러분들의 경험을 나누는 곳입니다.<br> 위 상단 메뉴에 음식별로 게시판이 있으니 서로 정보를 공유하세요!<br> 그 외에도 서로의 정보를
-        		나눌 수 있는 채팅방<br> 오늘의 메뉴를 추천해주는 기능 등 여러가지 기능도 있으니 사용하여 주세요!</p>
+        	<p>저희 사이트는 애완동물들 키우는 사람들을 위한 곳입니다.<br> 위 상단 메뉴에 게시판 별로 구분되어 있으니 서로 정보를 공유하세요!<br> 그 외에도 서로의 정보를
+        		나눌 수 있는 채팅방과<br> 지루하지 않게 재밌는 게임들도 있으니 많은 이용 바랍니다.</p>
         	<%if(login == 1){ %>
         	<a type="button" href="#" onclick="signOut();">로그아웃</a>
         	<%}else if(login == 2){ %>
