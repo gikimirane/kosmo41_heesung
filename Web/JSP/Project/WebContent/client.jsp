@@ -51,7 +51,7 @@
 				<button type="button" id="re" style="display: none;" onclick="roomout();">방 나가기</button>
 			</td>
 			<td style="width:200px">
-				<button type="button" style="display: block;" onclick="roomnamelist();">방 목록</button>
+				<button type="button" id="rl" style="display: block;" onclick="roomnamelist();">방 목록</button>
 			</td>
 		</tr>
 	</table>
@@ -90,10 +90,16 @@
 					<h2>전체유저 리스트</h2>
 					<textarea id="userlist" cols="20" rows="10" readonly></textarea>
 				</div>
-				<h2>방 목록</h2>
-				<textarea id="roomlist" cols="20" rows="10" placeholder="방 목록을 보시려면 방목록 버튼을 눌러주세요" readonly></textarea>
-				<input type="text" id="roomname" size="20" onkeypress="if(event.keyCode==13){send();}"/>
-				<button type="button" onclick="roomvisit()">방 입장하기</button>
+				<div id="rooml" style="display: block;">
+					<h2>방 목록</h2>
+					<textarea id="roomlist" cols="20" rows="10" placeholder="방 목록을 보시려면 방목록 버튼을 눌러주세요" readonly></textarea>
+					<input type="text" id="roomname" size="20" onkeypress="if(event.keyCode==13){send();}"/>
+					<button type="button" onclick="roomvisit()">방 입장하기</button>
+				</div>
+				<div id="userl" style="display: none;">
+					<h2>방 유저리스트</h2>
+					<textarea id="roomuserl" cols="20" rows="10" readonly></textarea>			
+				</div>
 			</td>
 	</table>
 	</div>
@@ -153,6 +159,9 @@
 	 		$('#super').css('display','block');
 	 		$('#rc').css('display','none');
 	 		$('#re').css('display','block');
+	 		$('#rl').css('display','none');
+	 		$('#rooml').css('display','none');
+	 		$('#userl').css('display','block');
 	 		webSocket.send(id+":"+"/roomcreate"+":"+roomid+":"+roompw+":"+humannum);
 	 		document.getElementById("roompw").value="";
 	 		document.getElementById("roomid").value="";
@@ -173,9 +182,13 @@
 	 		$('#chatname1').css('display','block');
 	 		$('#rc').css('display','none');
 	 		$('#re').css('display','block');
+	 		$('#rl').css('display','none');
+	 		$('#rooml').css('display','none');
+	 		$('#userl').css('display','block');
 	 		document.getElementById("chatroom").innerHTML=texted+" 방";
 	 		document.getElementById("messages").innerHTML="";
 	 		document.getElementById("roomname").value = "";
+	 		
 	 	}
 	 	function roomvisit(){
 	 		var id = "<%= id %>";
@@ -194,6 +207,11 @@
 	 		document.getElementById("messages").innerHTML="";
 	 		$('#rc').css('display','block');
 	 		$('#re').css('display','none');
+	 		$('#rl').css('display','block');
+	 		$('#chatname').css('display','block');
+	 		$('#chatname1').css('display','none');
+	 		$('#rooml').css('display','block');
+	 		$('#userl').css('display','none');
 	 	}
 	 	
 	 	function roomend(){
@@ -206,6 +224,9 @@
 	 		document.getElementById("messages").innerHTML="";
 	 		$('#rc').css('display','block');
 	 		$('#re').css('display','none');
+	 		$('#rl').css('display','block');
+	 		$('#rooml').css('display','block');
+	 		$('#userl').css('display','none');
 	 	}
 	 	
 	 	function roomout(){
@@ -214,6 +235,9 @@
 	 		document.getElementById("messages").innerHTML="";
 	 		$('#rc').css('display','block');
 	 		$('#re').css('display','none');
+	 		$('#rl').css('display','block');
+	 		$('#rooml').css('display','block');
+	 		$('#userl').css('display','none');
 	 		$('#chatname').css('display','block');
 	 		$('#chatname1').css('display','none');
 	 		$('#super').css('display','none');
@@ -232,7 +256,7 @@
 	 	}
 	 	function invitecheck(texted){
 	 		var text = texted;
-	 		var dd = confirm(text+"수락은 확인 거절은 취소를 눌러주세요");
+	 		var dd = confirm(text+". 수락은 확인 거절은 취소를 눌러주세요");
 	 		
 	 		if(dd){
 	 			yes(text);
@@ -252,6 +276,11 @@
 	 		var textedS = text.split(" ");
 	 		webSocket.send(id+":"+"/no"+":"+textedS[0]);
 	 	}
+	 	
+	 	function roomuserlistcheck(texted){
+	 		document.getElementById("roomuserl").innerHTML="";
+	 		roomuserl.innerHTML += texted;
+	 	}
 		//------------------------------------------------------------
 		
 		function userlistcheck(texted){
@@ -268,6 +297,7 @@
 			document.getElementById("messageinput").value = "";
 		}
 		function closeSocket(){
+			document.getElementById("userlist").value = "";
 			webSocket.close();
 		}
 		function login(){
@@ -281,6 +311,9 @@
 			}
 			else if(texted[0]=="/userlist"){
 				userlistcheck(texted[1]);
+			}
+			else if(texted[0]=="/roomuserlist"){
+				roomuserlistcheck(texted[1]);
 			}
 			else if(texted[0]=="/userout"){
 				outalert(texted[1]);
@@ -298,7 +331,6 @@
 				roomvisitcheck(texted[1]);
 			}
 			else if(texted[0]=="/invite"){
-				alert("초대")
 				invitecheck(texted[1]);
 			}
 			else if(texted[0]=="/no"){

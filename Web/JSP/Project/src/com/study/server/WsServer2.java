@@ -178,6 +178,7 @@ import javax.websocket.server.ServerEndpoint;
 		ResultSet resultSet1 = null;
 		String nickname ="";
 		String room = "";
+		String result = "fail";
 
 		try {
 			con = dataSource.getConnection();
@@ -186,19 +187,33 @@ import javax.websocket.server.ServerEndpoint;
 			if(resultSet.next()) {
 				room = resultSet.getString(1);
 			}
-			resultSet1 = stmt.executeQuery("select nick from chat where room='"+room+"'");
-			while(resultSet1.next()) {
-				nickname = resultSet1.getString(1);		
-				session = user.get(nickname);
-				session.getBasicRemote().sendText(nick+" : "+msg);
-			}		
+			resultSet = stmt.executeQuery("select * from ben ");
+			while(resultSet.next()) {
+				if(msg.contains(resultSet.getString(1))) {
+					result = "ok";
+					break;
+				}else {
+					result = "fail";
+				}
+			}
+			resultSet.close();
+			if(result.equals("ok")) {
+				session.getBasicRemote().sendText("비속어 입니다");
+			}
+			else if(result.equals("fail")) {
+				resultSet1 = stmt.executeQuery("select nick from chat where room='"+room+"'");
+				while(resultSet1.next()) {
+					nickname = resultSet1.getString(1);		
+					session = user.get(nickname);
+					session.getBasicRemote().sendText(nick+" : "+msg);
+				}	
+			}
+			resultSet1.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("방채팅");
 		} finally {
 			try {
-				if(resultSet != null) resultSet.close();
-				if(resultSet1 != null) resultSet1.close();
 				if(stmt != null) stmt.close();
 				if(con != null) con.close();
 			} catch (Exception e) {
@@ -370,6 +385,7 @@ import javax.websocket.server.ServerEndpoint;
 		Statement stmt = null;
 		ResultSet resultSet = null;
 		PreparedStatement pstmt = null;
+		String suname = "";
 		String room = "";
 		String name ="";
 		String number="";
@@ -380,34 +396,47 @@ import javax.websocket.server.ServerEndpoint;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.createStatement();
+			resultSet = stmt.executeQuery("select super from chat where nick='"+nick+"'");
+			if(resultSet.next()) {
+				suname = resultSet.getString(1);
+			}
 			resultSet = stmt.executeQuery("select room from chat where nick='"+nick+"'");
 			if(resultSet.next()) {
 				room = resultSet.getString(1);
 			}
-			resultSet = stmt.executeQuery("select nick from chat where room='"+room+"'");
-			if(resultSet.next()) {
-				name = resultSet.getString(1);
-			}
-			resultSet = stmt.executeQuery("select roomnumber from chat where room='"+room+"' and super='super'");
-			if(resultSet.next()) {
-				number = resultSet.getString(1);
-			}
-			System.out.println(number+name);
-			String query1 = "update chat set super='super', roomnumber='"+number+"' where nick ='"+name+"'";
-			session = user.get(name);
-			if(! name.equals(nick)) {
-				session.getBasicRemote().sendText("/super"+":");
-			}
-			pstmt = con.prepareStatement(query1);
-			pstmt.executeUpdate();
-			pstmt = con.prepareStatement(query);
-			pstmt.executeUpdate();
-			resultSet = stmt.executeQuery("select count(*) from chat where room='"+room+"'");
-			if(resultSet.next()) {
-				String human = resultSet.getString(1);
-				if(human.equals("0")) {
-					pstmt = con.prepareStatement("delete roomlist where roomlist='"+room+"'");
-					pstmt.executeUpdate();
+			if(suname.equals("0")) {
+				pstmt = con.prepareStatement(query);
+				pstmt.executeUpdate();
+				roomuserlistout(room,session);
+			}else if(suname.equals("super")){
+				resultSet = stmt.executeQuery("select nick from chat where room='"+room+"'");
+				while(resultSet.next()) {
+					name = resultSet.getString(1);
+					if(!name.equals(nick)) {
+						break;
+					}
+				}
+				resultSet = stmt.executeQuery("select roomnumber from chat where room='"+room+"' and super='super'");
+				if(resultSet.next()) {
+					number = resultSet.getString(1);
+				}
+				session = user.get(name);
+				if(! name.equals(nick)) {
+					session.getBasicRemote().sendText("/super"+":");
+				}
+				String query1 = "update chat set super='super', roomnumber='"+number+"' where nick ='"+name+"'";
+				pstmt = con.prepareStatement(query1);
+				pstmt.executeUpdate();
+				pstmt = con.prepareStatement(query);
+				pstmt.executeUpdate();
+				roomuserlistout(room,session);
+				resultSet = stmt.executeQuery("select count(*) from chat where room='"+room+"'");
+				if(resultSet.next()) {
+					String human = resultSet.getString(1);
+					if(human.equals("0")) {
+						pstmt = con.prepareStatement("delete roomlist where roomlist='"+room+"'");
+						pstmt.executeUpdate();
+					}
 				}
 			}
 			pstmt.close();
@@ -493,6 +522,76 @@ import javax.websocket.server.ServerEndpoint;
 		
 	}
 	
+	public void roomuserlist(String nick,Session session) {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		String room = "";
+		String users="";
+
+		try {
+			con = dataSource.getConnection();
+			stmt = con.createStatement();
+			resultSet = stmt.executeQuery("select room from chat where nick = '"+nick+"'");
+			if(resultSet.next()) {
+				room = resultSet.getString(1);
+			}
+			resultSet = stmt.executeQuery("select nick from chat where room = '"+room+"'");
+			while(resultSet.next()) {
+				users += resultSet.getString(1)+"\n";
+			}
+			resultSet = stmt.executeQuery("select nick from chat where room = '"+room+"'");
+			while(resultSet.next()) {
+				String name = resultSet.getString(1);
+				session = user.get(name);
+				session.getBasicRemote().sendText("/roomuserlist"+":"+users);
+			}
+			resultSet.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("방리스트에러");
+		} finally {
+			try {
+				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void roomuserlistout(String room,Session session) {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		String users="";
+
+		try {
+			con = dataSource.getConnection();
+			stmt = con.createStatement();
+			resultSet = stmt.executeQuery("select nick from chat where room = '"+room+"'");
+			while(resultSet.next()) {
+				users += resultSet.getString(1)+"\n";
+			}
+			resultSet = stmt.executeQuery("select nick from chat where room = '"+room+"'");
+			while(resultSet.next()) {
+				String name = resultSet.getString(1);
+				session = user.get(name);
+				session.getBasicRemote().sendText("/roomuserlist"+":"+users);
+			}
+			resultSet.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("방리스트에러");
+		} finally {
+			try {
+				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	
 	
@@ -545,6 +644,7 @@ import javax.websocket.server.ServerEndpoint;
 				}
 				else if(nick[1].equals("/roomcreate")) {
 					roomcreate(nickname,nick[4],nick[2],nick[3]);
+					roomuserlist(nickname,session);
 				}
 				else if(nick[1].equals("/roomlist")) {
 					roomlist(nickname,session);
@@ -552,20 +652,24 @@ import javax.websocket.server.ServerEndpoint;
 				else if(nick[1].equals("/roomvisit")) {
 					roomvisit(nickname,session,nick[2]);
 					roomsolo(nickname,session,nickname+" 님이 입장하셨습니다.");
+					roomuserlist(nickname,session);
 				}
 				else if(nick[1].equals("/out")) {
 					userout(nick[2],session);
 					roomtalk(nickname,session,"님이 "+nick[2]+"님을 강퇴하셨습니다.");
+					roomuserlist(nickname,session);
 				}
 				else if(nick[1].equals("/roomend")) {
 					roomend(nickname,session);
 				}
-				else if(nick[1].equals("/roomout")) {
+				else if(nick[1].equals("/roomout")) {				
 					roomsolo(nickname,session,nickname+" 님이 퇴장하셨습니다.");
 					roomout(nickname,session);
+					//추가
 				}
 				else if(nick[1].equals("/userinvite")) {
 					userinvite(nickname,session,nick[2]);
+					roomuserlist(nickname,session);
 				}
 				else if(nick[1].equals("/no")) {
 					session = user.get(nick[2]);
