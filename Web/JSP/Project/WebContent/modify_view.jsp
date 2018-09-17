@@ -23,7 +23,7 @@
 	}
 </script>
 
-<body>
+<body background="img/고양이강아지.jpeg">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a
@@ -64,7 +64,7 @@
 	<br/>
 	<hr>
 	<br/>
-	<table width="1000" cellpadding="0" cellspacing="0" border="1" class="container">
+	<table width="1000" cellpadding="0" cellspacing="0" border="1" class="container" style="background-color: white;">
 		<form name="modify_form" action="modify.do" method="post">
 			<input type="hidden" name="bId" value="${content_view.bId }">
 			<input type="hidden" name="table" value="<%= session.getAttribute("ctable")%>">

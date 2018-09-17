@@ -30,7 +30,7 @@
 	}
 </script>
 </head>
-<body>
+<body background="img/고양이강아지.jpeg">
 	<iframe id="ifrm_filedown"
 		style="position: absolute; z-index: 1; visibility: hidden;"></iframe>
 	<script
@@ -79,7 +79,7 @@
 	<br />
 	<hr>
 	<br />
-	<table class="table container">
+	<table class="table container" style="background-color: white;">
 		<input type="hidden" name="table"
 			value="<%=session.getAttribute("ctable")%>">
 		<tr>

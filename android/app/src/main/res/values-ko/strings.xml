@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Ex01_Hello</string>
+    <string name="button1">button1</string>
+    <string name="button2">버튼</string>
+</resources>

@@ -14,7 +14,7 @@
 	crossorigin="anonymous"></script>
 <script src="http://code.jquery.com/jquery.js"></script>
 </head>
-<body>
+<body background="img/고양이강아지.jpeg">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
 		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
@@ -65,7 +65,7 @@
 	<hr>
 	<br />
 	<form class="needs-validation" name="join" action="joinOk.jsp"
-		method="post">
+		method="post" style="background-color: white;">
 		<div class="form-group container">
 			<label for="id">* ID</label> <input type="text" class="form-control"
 				id="id" name="id" placeholder="아이디를 입력하세요">

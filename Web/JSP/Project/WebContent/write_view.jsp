@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 </head>
-<body>
+<body background="img/고양이강아지.jpeg">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <a class="navbar-brand" href="main.jsp" align="center">동물이야기</a>
@@ -56,7 +56,7 @@
 	<br/>
 	<hr>
 	<br/>
-	<table width="500" cellpadding="0" cellspacing="0" border="1" class="container">
+	<table width="500" cellpadding="0" cellspacing="0" border="1" class="container" style="background-color: white;">
 		<form name="write" action="write.do" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="table" value="<%= session.getAttribute("ctable")%>">
 			<tr>

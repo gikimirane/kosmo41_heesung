@@ -87,7 +87,7 @@
 </script>
 <title>Insert title here</title>
 </head>
-<body>
+<body background="img/고양이강아지.jpeg">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
 		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
@@ -142,7 +142,7 @@
 	<br/>
 	<hr>
 	<br/>
-	<form class="form-signin container" action="loginOk.jsp" method="post">
+	<form class="form-signin container" action="loginOk.jsp" method="post" style="background-color: white;">
     	<div class="text-center mb-4">
         	<h1 class="h3 mb-3 font-weight-normal"> <%= nick %> 님 어서오세요!</h1>
         	<p>저희 사이트는 애완동물들 키우는 사람들을 위한 곳입니다.<br> 위 상단 메뉴에 게시판 별로 구분되어 있으니 서로 정보를 공유하세요!<br> 그 외에도 서로의 정보를

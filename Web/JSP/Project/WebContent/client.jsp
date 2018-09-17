@@ -20,7 +20,7 @@
 <title>Chat Client</title>
 
 </head>
-<body>
+<body background="img/고양이강아지.jpeg">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
@@ -75,7 +75,7 @@
 	<hr>
 	<br />
 	<div>
-	<table style="width: 900px;">
+	<table style="width: 900px;" style="background-color: white;">
 		<tr>
 			<td align="center" style="width:600px;">
 				<div id="chatname" style="display: block;">
@@ -98,7 +98,7 @@
 			</td>
 		</tr>
 	</table>
-	<table aling="center" style="height: 600px; width: 900px; margin:0; paddin:0;">
+	<table aling="center" style="height: 600px; width: 900px; margin:0; paddin:0;" style="background-color: white;">
 		<col width="400px"><hr>
 		<col width="300px">
 		<col width="300px">
