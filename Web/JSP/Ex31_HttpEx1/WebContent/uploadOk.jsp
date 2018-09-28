@@ -13,6 +13,8 @@
 	String file = "";
 	String oriFile = "";
 	
+	JSONObject obj = new JSONObject();
+	
 	try{
 		MultipartRequest multi = new MultipartRequest(request, path, size, "UTF-8", new DefaultFileRenamePolicy());
 		
@@ -21,13 +23,18 @@
 		
 		file = multi.getFilesystemName(str);
 		oriFile = multi.getOriginalFileName(str);
+		
+		if(file == null){
+			obj.put("success",new Integer(2));
+			obj.put("desc","fail..");
+		}else{
+			obj.put("success",new Integer(1));
+			obj.put("desc","성공");
+		}
 	}catch(Exception e){
-		e.printStackTrace();
+		obj.put("success",new Integer(3));
+		obj.put("desc",e.getMessage());
 	}
-	
-	JSONObject obj = new JSONObject();
-	obj.put("success",new Integer(1));
-	obj.put("desc","성공");
 	
 	out.println(obj.toJSONString());
 %>
