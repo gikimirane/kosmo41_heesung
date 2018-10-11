@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Project5</string>
+    <string name="title_activity_st_map">Map</string>
 </resources>

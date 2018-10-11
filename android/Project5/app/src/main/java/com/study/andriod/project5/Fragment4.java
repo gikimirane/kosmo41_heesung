@@ -1,8 +1,8 @@
 package com.study.andriod.project5;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,20 +16,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.study.andriod.project5.정류소.St_Adapter;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -69,13 +68,6 @@ public class Fragment4 extends Fragment {
         if(ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
         }
-//        Button button = rootView.findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG,"Fragment4");
-//            }
-//        });
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -84,6 +76,24 @@ public class Fragment4 extends Fragment {
                 map = googleMap;
 
                 requestMyLocation();
+
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        Toast.makeText(getActivity().getApplicationContext(),marker.getSnippet()+": 클릭함",Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(),busStActivity.class);
+                        intent.putExtra("srId",marker.getSnippet());
+                        Log.d(TAG,marker.getSnippet());
+                        intent.putExtra("stName",marker.getTitle());
+                        startActivityForResult(intent,1);
+                    }
+                });
             }
         });
         try {
@@ -142,6 +152,7 @@ public class Fragment4 extends Fragment {
                         @Override
                         public void onLocationChanged(Location location) {
                             showCurrentLocation(location);
+
                         }
 
                         @Override
@@ -169,12 +180,13 @@ public class Fragment4 extends Fragment {
     private  void showCurrentLocation(Location location){
         LatLng curPoint = new LatLng(location.getLatitude(),location.getLongitude());
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint,15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint,15));
         //이거 없애면 애니메이션없이 바로 이동됨
         String X = String.valueOf(location.getLatitude());
         String Y = String.valueOf(location.getLongitude());
         data = new busTask();
         data.execute(X,Y);
+        Log.d(TAG,X+":"+Y);
         showMyLocationMarker(location);
     }
 
