@@ -1,5 +1,6 @@
 package com.study.andriod.project6;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -78,6 +79,8 @@ public class Fragment3 extends Fragment {
 
     private class busTask extends AsyncTask<String, Void, String> {
 
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+
         @Override
         protected String doInBackground(String...params){
 
@@ -87,6 +90,16 @@ public class Fragment3 extends Fragment {
             }  catch (Exception e) {
                 return "실패";
             }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setMessage("로딩중입니다..");
+
+            // show dialog
+            dialog.show();
+            super.onPreExecute();
         }
 
         @Override
@@ -153,6 +166,7 @@ public class Fragment3 extends Fragment {
                 busRouteNm.clear();
                 edStationNm.clear();
                 stStationNm.clear();
+                dialog.dismiss();
                 adapter.notifyDataSetChanged();
             }catch (Exception e){
                 e.printStackTrace();

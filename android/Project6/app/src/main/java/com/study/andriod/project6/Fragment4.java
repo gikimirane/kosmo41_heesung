@@ -183,7 +183,7 @@ public class Fragment4 extends Fragment {
     private  void showCurrentLocation(Location location){
         LatLng curPoint = new LatLng(location.getLatitude(),location.getLongitude());
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint,15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint,17));
         //이거 없애면 애니메이션없이 바로 이동됨
         String X = String.valueOf(location.getLatitude());
         String Y = String.valueOf(location.getLongitude());
@@ -194,6 +194,7 @@ public class Fragment4 extends Fragment {
 
     private void showMyLocationMarker(Location location) {
         if(myLocationMarker == null){
+            map.clear();
             myLocationMarker = new MarkerOptions();
             myLocationMarker.position(new LatLng(location.getLatitude(),location.getLongitude()));
             myLocationMarker.title("*** 내 위치 ***\n");
@@ -202,11 +203,11 @@ public class Fragment4 extends Fragment {
             map.addMarker(myLocationMarker);
         } else{
             myLocationMarker = new MarkerOptions();
-            myLocationMarker.position(new LatLng(location.getLatitude(),location.getLongitude()));
-            myLocationMarker.title("*** 내 위치 ***\n");
-            myLocationMarker.snippet("GPS로 확인한 위치");
-            myLocationMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mylocation));
-            map.addMarker(myLocationMarker);
+//            myLocationMarker.position(new LatLng(location.getLatitude(),location.getLongitude()));
+//            myLocationMarker.title("*** 내 위치 ***\n");
+//            myLocationMarker.snippet("GPS로 확인한 위치");
+//            myLocationMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mylocation));
+//            map.addMarker(myLocationMarker);
         }
     }
     @Override

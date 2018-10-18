@@ -16,11 +16,29 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/C:/Java/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_chevron_right_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="fff8f3" />
-                            <entry key="outputName" value="ic_android_black_24dp" />
+                            <entry key="color" value="020202" />
+                            <entry key="height" value="100" />
+                            <entry key="outputName" value="left" />
+                            <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\KOSMO19" />
+                            <entry key="width" value="100" />
                           </map>
                         </option>
                       </PersistentState>

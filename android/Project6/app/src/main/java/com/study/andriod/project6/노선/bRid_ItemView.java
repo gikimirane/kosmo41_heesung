@@ -51,6 +51,7 @@ public class bRid_ItemView extends LinearLayout {
     public void setImageView(String a){
         if(a.equals("a")) {
             imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(R.drawable.bus);
         }else{
             imageView.setVisibility(View.INVISIBLE);
         }

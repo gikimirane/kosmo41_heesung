@@ -1,9 +1,11 @@
 package com.study.andriod.project6;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -74,6 +76,8 @@ public class bRidActivity extends AppCompatActivity {
 
     private class busTask extends AsyncTask<String, Void, String> {
 
+        ProgressDialog dialog = new ProgressDialog(bRidActivity.this);
+
         @Override
         protected String doInBackground(String...params){
 
@@ -83,6 +87,15 @@ public class bRidActivity extends AppCompatActivity {
             }  catch (Exception e) {
                 return "실패";
             }
+        }
+
+        protected void onPreExecute() {
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setMessage("로딩중입니다..");
+
+            // show dialog
+            dialog.show();
+            super.onPreExecute();
         }
 
         @Override
@@ -141,22 +154,29 @@ public class bRidActivity extends AppCompatActivity {
                     eventType = xpp.next();
                 }
                 adapter.clearItem();
+                int a = 0;
                 for(int i = 0; i < stationNm.size(); i++){
+                    a = 0;
                     for(int j = 0; j < sectOrd.size(); j++){
                         if(seq.get(i).toString().equals(sectOrd.get(j).toString())) {
+                            Log.d(TAG,"ss1a : "+seq.get(i).toString()+"   :  "+sectOrd.get(j).toString());
                             bRid_Item item = new bRid_Item(arsId.get(i), beginTm.get(i), lastTm.get(i), stationNm.get(i), seq.get(i), "a");
                             adapter.addItem(item);
+                            a++;
                             break;
                         }
                     }
-                    bRid_Item item = new bRid_Item(arsId.get(i), beginTm.get(i), lastTm.get(i), stationNm.get(i), seq.get(i), "b");
-                    adapter.addItem(item);
+                    if(a==0) {
+                        bRid_Item item = new bRid_Item(arsId.get(i), beginTm.get(i), lastTm.get(i), stationNm.get(i), seq.get(i), "b");
+                        adapter.addItem(item);
+                    }
                 }
                 arsId.clear();
                 beginTm.clear();
                 lastTm.clear();
                 stationNm.clear();
                 seq.clear();
+                dialog.dismiss();
                 adapter.notifyDataSetChanged();
             }catch (Exception e){
                 e.printStackTrace();
@@ -270,6 +290,5 @@ public class bRidActivity extends AppCompatActivity {
         }finally {
             con.disconnect();
         }
-
     }
 }
